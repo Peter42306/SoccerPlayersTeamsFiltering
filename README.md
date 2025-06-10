@@ -4,7 +4,7 @@ ASP.NET Core MVC template application with SQLite, showing:
 
 - View football teams and players
 - See which players and coaches belong to which team
-- Filtering for players by position and team. 
+- Filtering for players by position and team
 - Use the seeded demo data
 
 ## Stack
