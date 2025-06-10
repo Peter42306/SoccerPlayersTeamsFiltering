@@ -18,26 +18,39 @@ namespace Soccer.Controllers
         // GET: Players
         public IActionResult Index(int? team, string? position)
         {
+            // Load all players including related team data (including Teams)
             IQueryable<Players> players = _context.Players.Include(p => p.Team);
+
+            // Filter by team if the parameter is provided and not equal to 0
             if (team != null && team != 0)
             {
                 players = players.Where(p => p.TeamId == team);
             }
+
+            // Filter by position if the string is provided
             if (!string.IsNullOrEmpty(position))
             {
                 players = players.Where(p => p.Position==position);
             }
 
+            // Get the list of all teams for the dropdown list
             List<Teams> teams = _context.Teams.ToList();
-            
+
+            // Add "All" option at the beginning of the list so the user can select all
             teams.Insert(0, new Teams { Name = "All", Id = 0 });
 
+            // Create the ViewModel and pass it to the view:
+            // - filtered list of players
+            // - list of teams as SelectList (for the dropdown)
+            // - the current position (if a filter is applied)
             UserListViewModel viewModel = new UserListViewModel
             {
                 Players = players.ToList(),
                 Teams = new SelectList(teams, "Id", "Name", team),
                 Position = position
             };
+
+            // Return the view with the model
             return View(viewModel);
         }
 
